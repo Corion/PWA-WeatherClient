@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <script src="js/handlebars-v4.1.2.js"></script>
+        <script src="js/localforage.min-1.7.3.js"></script>
+<script type="text/x-handlebars-template" id="screen_select">
+    <button onclick="javascript:action_shuffle()">Shuffle</button>
+    <button onclick="javascript:action_select()">Select</button>
+    <ul>
+    {{#each randomized_choices}}<li>{{name}}</li>{{/each}}
+    </ul>
+</script>
+<script type="text/x-handlebars-template" id="screen_config">
+    <ul>
+    {{#each choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'choices.%d.name',{{@index}})"/>
+    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>{{/each}}
+    <li><button onclick="javascript:add_choice()">+ Add a choice</button></li>
+    </ul>
+    <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
+</script>
+<script type="text/x-handlebars-template" id="screen_about">
+    <h1>Random selection helper</h1>
+    <div>About this app</div>
+</script>
+<script>
+    var default_state = {
+        randomized_choices: [],
+        choices: [
+            {"name":"Configure item 1"},
+            {"name":"Configure item 2"}
+        ],
+        delay: 3,
+        screen: "screen_select"
+    };
+    var state;
+
+    function setItemAt(state,path,value) {
+        let items = path.split( /\./ );
+        let val = state;
+        for( let pos = 0; pos < items.length-1; pos++ ) {
+            val = val[items[pos]];
+        };
+        val[items[items.length-1]] = value;
+        return value
+    };
+
+    function remove_choice(index) {
+        state.choices.splice(index,1);
+        update(state);
+    }
+
+    function add_choice() {
+        state.choices.push({});
+        update(state);
+    }
+
+    function store_value(state,new_value, path, position) {
+        path = path.replace('%d',position);
+        setItemAt(state,path,new_value);
+    };
+
+    function loadConfig() {
+        return localforage.getItem("config")
+    };
+
+    function storeConfig(config) {
+        //var blob = new Blob([image]);
+        //var imageURI = window.URL.createObjectURL(blob);
+        return localforage.setItem("config", config, function() {})
+    };
+    function render_screen(screen_name,state) {
+        let source   = document.getElementById(screen_name).innerHTML;
+        let template = Handlebars.compile(source);
+        let s = template(state);
+        window.document.getElementById('screen').innerHTML = s;
+    };
+    function render_select(state) {
+        state.screen = 'screen_select';
+        update(state);
+    };
+    function render_config(state) {
+        state.screen = 'screen_config';
+        update(state);
+    };
+    function render_about(state) {
+        state.screen = 'screen_about';
+        update(state);
+    };
+
+    function update(state) {
+        render_screen(state.screen, state);
+        if( state.screen === 'screen_config' ) {
+            storeConfig(state).get();
+        };
+    }
+
+    function init() {
+        loadConfig().then(function(appState) {
+            state = appState || default_state;
+            render_select(state);
+        });
+    }
+
+    /* Fisher-Yates shuffle */
+    function shuffle(a) {
+        let b = a.slice(); // make a copy
+        for (let i = b.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [b[i], b[j]] = [b[j], b[i]];
+        }
+        return b;
+    }
+
+    function action_shuffle() {
+        state.randomized_choices = shuffle(state.choices);
+        update(state);
+    };
+    function action_select() {
+        let s = shuffle(state.choices);
+        state.randomized_choices = [s[0]];
+        update(state);
+    };
+</script>
+</head>
+<body onload="javascript:init()">
+<div id="header"><a href="#" onclick="javascript:render_select(state);">Run</a> | <a href="#" onclick="javascript:render_about(state);">About</a> | <a href="#" onclick="render_config(state)">Config</a></div>
+<div id="screen">
+    Javascript is not enabled?!
+</div>
+</body>
+</html>
