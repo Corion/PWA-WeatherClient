@@ -1,0 +1,39 @@
+{
+  "short_name": "RandomSelect",
+  "name": "RandomSelect - who's on first?",
+  "icons": [
+    {
+      "src": "launcher-icon-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "launcher-icon-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "launcher-icon-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html",
+  "display":"standalone",
+  "background":"#7F7F7F",
+  "theme_color":"#FFE040",
+  "related_applications": [
+      {
+        "platform": "Web"
+      }
+      /*, {
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      }
+      , {
+        "platform": "itunes",
+        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+      }
+      */
+  ]
+}
