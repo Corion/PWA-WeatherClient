@@ -7,6 +7,7 @@
         <link rel="manifest" href="./manifest.json">
         <script src="js/handlebars-v4.1.2.js"></script>
         <script src="js/localforage.min-1.7.3.js"></script>
+        <script src="js/morphdom-2.5.4.js"></script>
 <script type="text/x-handlebars-template" id="screen_select">
     <button onclick="javascript:action_shuffle()">Shuffle</button>
     <button onclick="javascript:action_select()">Select</button>
@@ -72,11 +73,23 @@
         //var imageURI = window.URL.createObjectURL(blob);
         return localforage.setItem("config", config, function() {})
     };
+
+    function morph(DOM,html,options) {
+        // Clean up the HTML so that morphdom understands what we want it to do
+        html = html.replace(/^\s+/,'');
+        html = html.replace(/^<!--.*?-->\s*/m,'');
+        // console.log(html);
+        morphdom(DOM, html, options);
+    };
+
     function render_screen(screen_name,state) {
         let source   = document.getElementById(screen_name).innerHTML;
         let template = Handlebars.compile(source);
         let s = template(state);
-        window.document.getElementById('screen').innerHTML = s;
+        s = '<div id="screen">' + s + '</div>';
+        morph(
+            window.document.getElementById('screen'),
+            s, {});
     };
     function render_select(state) {
         state.screen = 'screen_select';
