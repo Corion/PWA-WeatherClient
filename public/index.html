@@ -18,7 +18,7 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
-    {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'choices.current_config.%d.name',{{@index}})"/>
+    {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>{{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
     </ul>
