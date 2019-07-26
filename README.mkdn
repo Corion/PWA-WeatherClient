@@ -1,0 +1,24 @@
+# RandomSelect
+
+A small PWA to do a random selection or random ordering of a set of items.
+
+This is mainly intended to give a fair/independent order in which kids enter
+the car without any discussion. Also, it is a nice toy example of a PWA
+with very little external dependencies.
+
+## External Javascript Modules
+
+### Templating
+
+[Handlebars.js](https://handlebarsjs.com/reference.html)
+
+### Persistence
+
+[localForage](https://localforage.github.io/localForage/)
+
+The setup should persist between invocations.
+
+# TODO
+
+    * Take images
+    * Store images in localforage
