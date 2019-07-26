@@ -113,7 +113,7 @@
         state.screen = 'screen_config';
 
         state.current_config = {
-            "choices": state.choices.slice(),
+            "choices": clone(state.choices),
             "delay"  : state.delay
         };
 
@@ -147,6 +147,12 @@ if ('serviceWorker' in navigator) {
             render_select(state);
         });
     }
+
+    /* Array deep clone */
+    const clone = (items) => items.map(
+         item => Array.isArray(item)         ? clone(item)
+               : typeof( item ) === 'object' ? Object.assign({}, item )
+               : item);
 
     /* Fisher-Yates shuffle */
     function shuffle(a) {
