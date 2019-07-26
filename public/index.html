@@ -107,7 +107,7 @@
     function update(state) {
         render_screen(state.screen, state);
         if( state.screen === 'screen_config' ) {
-            storeConfig(state).get();
+            storeConfig(state);
         };
     }
 
