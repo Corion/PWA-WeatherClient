@@ -53,12 +53,12 @@
     };
 
     function remove_choice(index) {
-        state.choices.splice(index,1);
+        state.current_config.choices.splice(index,1);
         update(state);
     }
 
     function add_choice() {
-        state.choices.push({});
+        state.current_config.choices.push({});
         update(state);
     }
 
@@ -75,6 +75,11 @@
         //var blob = new Blob([image]);
         //var imageURI = window.URL.createObjectURL(blob);
         return localforage.setItem("config", config, function() {})
+    };
+
+    function save_config() {
+        state.choices = state.current_config.choices.slice();
+        state.deay    = state.current_config.delay;
     };
 
     function morph(DOM,html,options) {
@@ -100,6 +105,12 @@
     };
     function render_config(state) {
         state.screen = 'screen_config';
+
+        state.current_config = {
+            "choices": state.choices.slice(),
+            "delay"  : state.delay
+        };
+
         update(state);
     };
     function render_about(state) {
