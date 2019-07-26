@@ -23,6 +23,7 @@
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
     </ul>
     <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
+    <button onclick="javascript:save_config();">Save</button><button onclick="javascript:cancel_select()">Cancel</button>
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
     <h1>Random selection helper</h1>
