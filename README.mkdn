@@ -32,5 +32,9 @@ The setup should persist between invocations.
   instead of setting `innerHTML` on state changes
 
 * Take images
-
 * Store images in localforage
+* Host copy online
+* Implement offline features
+  * Code caching
+  * Start screen
+  * manifest.json
