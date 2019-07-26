@@ -6,6 +6,14 @@ This is mainly intended to give a fair/independent order in which kids enter
 the car without any discussion. Also, it is a nice toy example of a PWA
 with very little external dependencies.
 
+## Application Logic
+
+All application state lives in the variable `state`. The three "pages" of the
+application are rendered from that `state`. Whenever `state` is changed, a call
+to `update()` redraws the current page. This moves all application logic
+into setting up parts of `state` and calling `update()` afterwards to redraw
+the world.
+
 ## External Javascript Modules
 
 ### Templating
@@ -20,5 +28,9 @@ The setup should persist between invocations.
 
 # TODO
 
+    * Move to [morphdom](https://github.com/patrick-steele-idem/morphdom)
+      instead of setting `innerHTML` on state changes
+
     * Take images
+
     * Store images in localforage
