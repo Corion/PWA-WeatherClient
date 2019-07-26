@@ -14,7 +14,7 @@ to `update()` redraws the current page. This moves all application logic
 into setting up parts of `state` and calling `update()` afterwards to redraw
 the world.
 
-## External Javascript Modules
+## Functionality Provided by External Javascript Modules
 
 ### Templating - [Handlebars.js](https://handlebarsjs.com/reference.html)
 
