@@ -23,7 +23,7 @@
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
     </ul>
     <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
-    <button onclick="javascript:save_config();">Save</button><button onclick="javascript:cancel_select()">Cancel</button>
+    <button onclick="javascript:action_config_save();">Save</button><button onclick="javascript:action_config_cancel()">Cancel</button>
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
     <h1>Random selection helper</h1>
@@ -77,10 +77,16 @@
         return localforage.setItem("config", config, function() {})
     };
 
-    function save_config() {
+    function action_config_save() {
         state.choices = state.current_config.choices.slice();
         state.delay   = state.current_config.delay;
+        storeConfig(state);
+        render_select(state);
     };
+
+    function action_config_cancel() {
+        render_select(state);
+    }
 
     function morph(DOM,html,options) {
         // Clean up the HTML so that morphdom understands what we want it to do
