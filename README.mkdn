@@ -43,3 +43,4 @@ wrapper for browser-local storage.
   * Code caching
   * Start screen
   * manifest.json
+* Precompile templates to Javascript
