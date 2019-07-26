@@ -20,7 +20,7 @@
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'choices.current_config.%d.name',{{@index}})"/>
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>{{/each}}
-    <li><button onclick="javascript:add_choice()">+ Add a choice</button></li>
+    <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
     </ul>
     <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
 </script>
