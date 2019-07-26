@@ -125,6 +125,19 @@
         };
     }
 
+/* Launch our service worker as cache */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+            console.log('Service Worker is registered', registration);
+        })
+        .catch(err => {
+            console.error('Registration failed:', err);
+        });
+    });
+};
+
     function init() {
         loadConfig().then(function(appState) {
             state = appState || default_state;
