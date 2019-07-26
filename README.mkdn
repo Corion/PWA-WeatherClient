@@ -33,14 +33,10 @@ wrapper for browser-local storage.
 
 # TODO
 
-* Move to [morphdom](https://github.com/patrick-steele-idem/morphdom)
-  instead of setting `innerHTML` on state changes
-
 * Take images
 * Store images in localforage
 * Host copy online
 * Implement offline features
   * Code caching
   * Start screen
-  * manifest.json
 * Precompile templates to Javascript
