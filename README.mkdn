@@ -20,11 +20,16 @@ the world.
 
 [Handlebars.js](https://handlebarsjs.com/reference.html)
 
+Currently the templates are not precompiled to Javascript. This means that we
+don't need any build infrastructure either and can get by by simply moving some
+of the work to runtime.
+
 ### Persistence
 
 [localForage](https://localforage.github.io/localForage/)
 
-The setup should persist between invocations.
+The setup should persist between invocations. localForage gives us a nice
+wrapper for browser-local storage.
 
 # TODO
 
