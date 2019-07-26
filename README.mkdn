@@ -28,9 +28,9 @@ The setup should persist between invocations.
 
 # TODO
 
-    * Move to [morphdom](https://github.com/patrick-steele-idem/morphdom)
-      instead of setting `innerHTML` on state changes
+* Move to [morphdom](https://github.com/patrick-steele-idem/morphdom)
+  instead of setting `innerHTML` on state changes
 
-    * Take images
+* Take images
 
-    * Store images in localforage
+* Store images in localforage
