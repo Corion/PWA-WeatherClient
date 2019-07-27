@@ -36,9 +36,12 @@ wrapper for browser-local storage.
 
 # TODO
 
-* Store images in localforage
 * Host copy online
 * Implement offline features
   * Code caching
   * Start screen
 * Precompile templates to Javascript
+* Implement selection animation
+  * Spin names/images for `delay` seconds
+* Implement locking re-selection
+* Add documentation to the Config screen
