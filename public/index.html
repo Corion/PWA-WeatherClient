@@ -19,7 +19,10 @@
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
-    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>{{/each}}
+    <input type="file" accept="image/*" capture="environment" onchange="javascrip:update_preview(this.value, {{@index}}" />
+    <img src="#" alt="Preview for image {{@index}}" />
+    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
+    {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
     </ul>
     <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
@@ -153,6 +156,18 @@ if ('serviceWorker' in navigator) {
          item => Array.isArray(item)         ? clone(item)
                : typeof( item ) === 'object' ? Object.assign({}, item )
                : item);
+
+    function readFileInputURL(input, target) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                target.src = e.target.result;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
     /* Fisher-Yates shuffle */
     function shuffle(a) {
