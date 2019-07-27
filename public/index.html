@@ -21,7 +21,7 @@
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
     <input type="file" accept="image/*" capture="environment" onchange="javascript:update_image(this, {{@index}}, 'img_{{@index}}')" />
-    <img src="{{image}}" alt="Preview for image {{@index}}" id="img_{{@index}}" class="preview" />
+    <img src="{{image}}" alt="Display of custom image {{@index}}" id="img_{{@index}}" class="preview" />
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
     {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
@@ -166,7 +166,6 @@ if ('serviceWorker' in navigator) {
                 // XXX resize here so we have a small image
                 let target = document.getElementById(target_id);
                 target.src = e.target.result;
-                target.style.display = 'inline';
 
                 // We store the data: url, instead of a blob. That's not nice.
                 state.current_config.choices[index].image = e.target.result;
