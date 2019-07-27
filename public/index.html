@@ -19,7 +19,10 @@
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'choices.%d.name',{{@index}})"/>
-    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>{{/each}}
+    <input type="file" accept="image/*" capture="environment" onchange="javascrip:update_preview(this.value, {{@index}}" />
+    <img src="#" alt="Preview for image {{@index}}" />
+    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
+    {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add a choice</button></li>
     </ul>
     <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
@@ -117,6 +120,18 @@
             state = appState || default_state;
             render_select(state);
         });
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 
     /* Fisher-Yates shuffle */
