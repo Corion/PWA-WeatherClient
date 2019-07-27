@@ -36,7 +36,6 @@ wrapper for browser-local storage.
 
 # TODO
 
-* Take images
 * Store images in localforage
 * Host copy online
 * Implement offline features

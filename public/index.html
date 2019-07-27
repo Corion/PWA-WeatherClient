@@ -163,9 +163,13 @@ if ('serviceWorker' in navigator) {
             var reader = new FileReader();
 
             reader.onloadend = function (e) {
+                // XXX resize here so we have a small image
                 let target = document.getElementById(target_id);
                 target.src = e.target.result;
                 target.style.display = 'inline';
+
+                // We store the data: url, instead of a blob. That's not nice.
+                state.current_choices[index].image = e.target.result;
             }
 
             reader.readAsDataURL(input.files[0]);
