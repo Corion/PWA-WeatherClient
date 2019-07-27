@@ -166,11 +166,10 @@ if ('serviceWorker' in navigator) {
 
             reader.onloadend = function (e) {
                 // XXX resize here so we have a small image
-                let target = document.getElementById(target_id);
-                target.src = e.target.result;
 
                 // We store the data: url, instead of a blob. That's not nice.
                 state.current_config.choices[index].image = e.target.result;
+                update(state);
             }
 
             reader.readAsDataURL(input.files[0]);
