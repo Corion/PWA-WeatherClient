@@ -14,14 +14,14 @@
     <button onclick="javascript:action_shuffle()">Shuffle</button>
     <button onclick="javascript:action_select()">Select</button>
     <ul>
-    {{#each randomized_choices}}<li>{{name}}</li>{{/each}}
+    {{#each randomized_choices}}<li>{{#if image}}<img class="preview" src="{{image}}" />{{else}}{{name}}{{/if}}</li>{{/each}}
     </ul>
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
     <input type="file" accept="image/*" capture="environment" onchange="javascript:update_image(this, {{@index}}, 'img_{{@index}}')" />
-    <img src="#" alt="Preview for image {{@index}}" id="img_{{@index}}" class="preview" />
+    <img src="{{image}}" alt="Preview for image {{@index}}" id="img_{{@index}}" class="preview" />
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
     {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
@@ -169,7 +169,7 @@ if ('serviceWorker' in navigator) {
                 target.style.display = 'inline';
 
                 // We store the data: url, instead of a blob. That's not nice.
-                state.current_choices[index].image = e.target.result;
+                state.current_config.choices[index].image = e.target.result;
             }
 
             reader.readAsDataURL(input.files[0]);

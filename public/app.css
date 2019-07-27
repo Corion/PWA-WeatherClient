@@ -1,5 +1,5 @@
 img.preview {
-    display:none;
+    /* display:none; */
     max-width: 160px;
     max-height: 160px;
     border: none;
