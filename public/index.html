@@ -21,7 +21,9 @@
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
     <input type="file" accept="image/*" capture="environment" onchange="javascript:update_image(this, {{@index}}, 'img_{{@index}}')" />
+    {{#if image}}
     <img src="{{image}}" alt="Display of custom image {{@index}}" id="img_{{@index}}" class="preview" />
+    {{/if}}
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
     {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
