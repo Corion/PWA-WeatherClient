@@ -13,7 +13,8 @@ self.addEventListener('install', function(event) {
           '/js/localforage.min-1.7.3.js',
           '/js/handlebars-v4.1.2.js',
           '/js/morphdom-2.5.4.js',
-          '/css/bootstrap-3.4.1.min.css'
+          '/css/bootstrap-3.4.1.min.css',
+          '/app.css'
           // '/offline.html'
         ]
       );
