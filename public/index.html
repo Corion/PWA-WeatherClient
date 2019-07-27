@@ -20,8 +20,8 @@
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
-    <input type="file" accept="image/*" capture="environment" onchange="javascrip:update_preview(this.value, {{@index}}" />
-    <img src="#" alt="Preview for image {{@index}}" />
+    <input type="file" accept="image/*" capture="environment" onchange="javascript:update_image(this, {{@index}}, 'img_{{@index}}')" />
+    <img src="#" alt="Preview for image {{@index}}" id="img_{{@index}}" class="preview" />
     <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
     {{/each}}
     <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
@@ -158,12 +158,14 @@ if ('serviceWorker' in navigator) {
                : typeof( item ) === 'object' ? Object.assign({}, item )
                : item);
 
-    function readFileInputURL(input, target) {
+    function update_image( input, index, target_id ) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
-            reader.onload = function (e) {
+            reader.onloadend = function (e) {
+                let target = document.getElementById(target_id);
                 target.src = e.target.result;
+                target.style.display = 'inline';
             }
 
             reader.readAsDataURL(input.files[0]);
