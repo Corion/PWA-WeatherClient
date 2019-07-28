@@ -11,6 +11,7 @@
         <script src="js/localforage.min-1.7.3.js"></script>
         <script src="js/morphdom-2.5.4.js"></script>
 <script type="text/x-handlebars-template" id="screen_select">
+    {{#if installOnHomescreen}}<a href="#" onclick="javascript:installOnHomescreen();">Install to home screen</a>{{/if}}
     <button onclick="javascript:action_shuffle()">Shuffle</button>
     <button onclick="javascript:action_select()">Select</button>
     <ul>
@@ -44,6 +45,7 @@
         ],
         current_config: {},
         delay: 3,
+        state_install_prompt: "not_asked",
         screen: "screen_select"
     };
     var state;
@@ -147,6 +149,31 @@ if ('serviceWorker' in navigator) {
         });
     });
 };
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    state.installOnHomeScreen = 'ask';
+});
+
+    function installOnHomescreen() {
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice
+            .then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+                deferredPrompt = null;
+                state.installOnHomeScreen = '';
+            });
+    }
 
     function init() {
         loadConfig().then(function(appState) {
