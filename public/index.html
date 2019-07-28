@@ -166,13 +166,30 @@ if ('serviceWorker' in navigator) {
             var reader = new FileReader();
 
             reader.onloadend = function (e) {
-                // XXX resize here so we have a small image
+                // resize here so we have a small image
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement("canvas");
+                    // Figure out whether it's landscape or portrait
+                    if( img.width > img.height ) {
+                        canvas.width = 320;
+                        canvas.height = canvas.width * (img.height/img.width);
+                    } else {
+                        canvas.width = canvas.height * (img.width/img.height);
+                        canvas.height = 320;
+                    }
 
-                // We store the data: url, instead of a blob. That's not nice.
-                state.current_config.choices[index].image = e.target.result;
-                update(state);
+                    let context = canvas.getContext("2d");
+
+                    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // XXX We store the data: url, instead of a blob.
+                    // ... That's not nice, but oh so convenient
+                    state.current_config.choices[index].image = canvas.toDataURL();
+                    update(state);
+                };
+                img.src = e.target.result;
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }
