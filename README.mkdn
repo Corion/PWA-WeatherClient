@@ -36,7 +36,6 @@ wrapper for browser-local storage.
 
 # TODO
 
-* Host copy online
 * Implement offline features
   * Code caching
   * Start screen
