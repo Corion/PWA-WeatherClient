@@ -1,4 +1,7 @@
 {
+  "manifest_version":2,
+  "version": "20190721.0001",
+  "author":"Max Maischein",
   "short_name": "RandomSelect",
   "name": "RandomSelect - who's on first?",
   "icons": [
