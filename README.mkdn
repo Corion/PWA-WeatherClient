@@ -36,6 +36,7 @@ wrapper for browser-local storage.
 
 # TODO
 
+* Add mobile-friendly CSS / screen setup
 * Implement offline features
   * Code caching
   * Start screen
