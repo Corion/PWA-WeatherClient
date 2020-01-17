@@ -1,7 +1,6 @@
-<!DOCTYPE html>
 <html>
     <head>
-    <title>RandomSelect - who's on first?</title>
+    <title>Weather</title>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src data: 'self'; style-src 'unsafe-inline' 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <meta name="viewport" content= "width=device-width, initial-scale=1.0">
@@ -11,26 +10,32 @@
     <script src="js/handlebars-v4.1.2.js"></script>
     <script src="js/localforage.min-1.7.3.js"></script>
     <script src="js/morphdom-2.5.4.js"></script>
-<script type="text/x-handlebars-template" id="screen_select">
+    <!--
+    -->
+<script type="text/x-handlebars-template" id="screen_3day">
     {{#if installOnHomescreen}}<a href="#" onclick="javascript:installOnHomescreen();">Install to home screen</a>{{/if}}
+    <!--
     <button onclick="javascript:action_shuffle()">Shuffle</button>
     <button onclick="javascript:action_select()">Select</button>
-    <ul>
-    {{#each randomized_choices}}<li>{{#if image}}<img class="preview" src="{{image}}" alt="{{name}}" />{{else}}{{name}}{{/if}}</li>{{/each}}
-    </ul>
+    -->
+    <div class="locations">
+    {{#each locations}}<div class="location">
+    <div class="location-description">{{forecast.0.description}}</div>
+    <!--
+        <table><thead><tr><th></th><th>{{forecast.0.weekday}}</th><th>{{forecast.4.weekday}}</th><th>{{forecast.8.weekday}}</th></tr></thead><tbody>
+        <tr><td></td><td>{{forecast.0.mintemp}}° / {{ forecast.0.maxtemp }}° {{ forecast.0.emoji }}</td> <td>{{forecast.4.mintemp}}° / {{ forecast.4.maxtemp }}° {{ forecast.4.emoji }}</td><td>{{forecast.8.mintemp}}  / {{ forecast.8.maxtemp  }}° {{ forecast.8.emoji }}</td></tr>
+        <tr><td></td><td>{{forecast.1.mintemp}}° / {{ forecast.1.maxtemp }}° {{ forecast.1.emoji }}</td> <td>{{forecast.5.mintemp}}° / {{ forecast.5.maxtemp }}° {{ forecast.5.emoji }}</td><td>{{forecast.9.mintemp}}  / {{ forecast.9.maxtemp  }}° {{ forecast.9.emoji }}</td></tr>
+        <tr><td></td><td>{{forecast.2.mintemp}}° / {{ forecast.2.maxtemp }}° {{ forecast.2.emoji }}</td> <td>{{forecast.6.mintemp}}° / {{ forecast.6.maxtemp }}° {{ forecast.6.emoji }}</td><td>{{forecast.10.mintemp}} / {{ forecast.10.maxtemp }}° {{ forecast.10.emoji }}</td></tr>
+        <tr><td></td><td>{{forecast.3.mintemp}}° / {{ forecast.3.maxtemp }}° {{ forecast.3.emoji }}</td> <td>{{forecast.7.mintemp}}° / {{ forecast.7.maxtemp }}° {{ forecast.7.emoji }}</td><td>{{forecast.11.mintemp}} / {{ forecast.11.maxtemp }}° {{ forecast.11.emoji }}</td></tr>
+        </tbody>
+        </table>-->
+    </div>
+    {{/each}}
+    </div>
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
-    <input type="file" accept="image/*" capture="environment" onchange="javascript:update_image(this, {{@index}}, 'img_{{@index}}')" />
-    {{#if image}}
-    <img src="{{image}}" alt="Display of custom image {{@index}}" id="img_{{@index}}" class="preview" />
-    {{/if}}
-    <button onclick="javascript:remove_choice({{@index}});">delete</button></li>
-    {{/each}}
-    <li><button onclick="javascript:add_choice()">+ Add choice</button></li>
-    </ul>
-    <p>Result delay:<input name="delay" value="{{delay}}" onblur="javascript:store_value(state,this.value,'delay',0)"></p>
     <button onclick="javascript:action_config_save();">Save</button><button onclick="javascript:action_config_cancel()">Cancel</button>
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
@@ -39,15 +44,39 @@
 </script>
 <script>
     var default_state = {
-        randomized_choices: [],
-        choices: [
-            {"name":"Configure item 1"},
-            {"name":"Configure item 2"}
+        locations: [
+            { name: "current", latitude: 50, longitude: 8, forecast: [
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour: 18 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour: 18 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour: 18 },
+              ] },
+            { name: "Frankfurt (fix)", latitude: 50, longitude: 8, forecast: [
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Fr", hour: 18 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "Sa", hour: 18 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour:  0 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour:  6 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour: 12 },
+                  { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour: 18 },
+              ] },
         ],
         current_config: {},
-        delay: 3,
         state_install_prompt: "not_asked",
-        screen: "screen_select"
+        screen: "screen_3day"
     };
     var state;
 
@@ -90,11 +119,11 @@
         state.choices = state.current_config.choices.slice();
         state.delay   = state.current_config.delay;
         storeConfig(state);
-        render_select(state);
+        render_3day(state);
     };
 
     function action_config_cancel() {
-        render_select(state);
+        render_3day(state);
     }
 
     function morph(DOM,html,options) {
@@ -106,7 +135,11 @@
     };
 
     function render_screen(screen_name,state) {
+    console.log( screen_name );
         let source   = document.getElementById(screen_name).innerHTML;
+        if( ! source ) {
+            alert("No screen '"+screen_name+"' found");
+        };
         let template = Handlebars.compile(source);
         let s = template(state);
         s = '<div id="screen">' + s + '</div>';
@@ -114,8 +147,8 @@
             window.document.getElementById('screen'),
             s, {});
     };
-    function render_select(state) {
-        state.screen = 'screen_select';
+    function render_3day(state) {
+        state.screen = 'screen_3day';
         update(state);
     };
     function render_config(state) {
@@ -179,7 +212,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     function init() {
         loadConfig().then(function(appState) {
             state = appState || default_state;
-            render_select(state);
+            render_3day(state);
         });
     }
 
@@ -244,7 +277,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 </script>
 </head>
 <body onload="javascript:init()">
-<div id="header"><a href="#" onclick="javascript:render_select(state);">Run</a> | <a href="#" onclick="javascript:render_about(state);">About</a> | <a href="#" onclick="render_config(state)">Config</a></div>
+<div id="header"><a href="#" onclick="javascript:render_select(state);">Forecast</a> | <a href="#" onclick="javascript:render_about(state);">About</a> | <a href="#" onclick="render_config(state)">Config</a></div>
 <div id="screen">
     <p>Javascript is not enabled?!</p>
     <p>I'm sorry, but this app doesn't make sense without Javascript.</p>
