@@ -11,21 +11,23 @@ div.location-description {
 div.locations {
     float: left;
     /* display: flex; */
+    list-style: none;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scroll-snap-type: x mandatory;
     width: 100%;
 }
 
 div.location {
-    box-sizing: border-box;
+    display: inline-block;
     width: 90%;
+    scroll-snap-align: center;
 }
 
-li {
-    width: 80%;
-    display: inline;
-    float: left;
+table {
+    width: 100%;
 }
-
-table: { display: inline; }
 
 th {
     text-align: center;
