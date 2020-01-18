@@ -211,7 +211,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
     function init() {
         loadConfig().then(function(appState) {
-            state = appState || default_state;
+            //state = appState || default_state;
+            state = default_state;
             render_3day(state);
         });
     }
