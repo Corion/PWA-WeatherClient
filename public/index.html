@@ -19,6 +19,7 @@
     <button onclick="javascript:action_select()">Select</button>
     -->
     <div class="locations">
+        <div class="location-border"></div>
     {{#each locations}}<div class="location">
     <div class="location-description">{{forecast.0.description}}</div>
         <table><thead><tr><th></th><th>{{forecast.0.weekday}}</th><th>{{forecast.4.weekday}}</th><th>{{forecast.8.weekday}}</th></tr></thead><tbody>
@@ -30,6 +31,7 @@
         </table>
     </div>
     {{/each}}
+        <div class="location-border"></div>
     </div>
 </script>
 <script type="text/x-handlebars-template" id="screen_config">

@@ -5,7 +5,7 @@
 
 div.location-description {
     font-size: 24pt;
-    width: 400px;
+    text-align: center;
 }
 
 div.locations {
@@ -23,6 +23,11 @@ div.location {
     display: inline-block;
     width: 90%;
     scroll-snap-align: center;
+}
+
+div.location-border {
+    display: inline-block;
+    width: 10%;
 }
 
 table {
