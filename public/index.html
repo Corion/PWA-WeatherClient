@@ -171,6 +171,28 @@
         render_screen(state.screen, state);
     }
 
+    /* Fetch the locations (and other stuff?) via HTTP */
+    /* We do all the caching in the client instead of trying to do HTTP
+       caching, since we must invalidate the data manually anyway
+    */
+    function fetch_location_weather(locations) {
+        let url = "./forecast";
+        fetch(url,
+            {
+                method: "POST",
+                headers: { "Content-Type":"application/json" },
+                body: JSON.stringify(locations)
+            },
+        ).then(locations => {
+            // Update the new state from the data
+            state.locations = locations;
+            // Cache the received weather data in our "config"
+            // for lack of a better place
+            // Update our HTML if we are displaying forecast data
+            render(state);
+        })
+    }
+
 /* Launch our service worker as cache */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -183,7 +205,37 @@ if ('serviceWorker' in navigator) {
             console.error('Registration failed:', err);
         });
     });
+
+    navigator.serviceWorker.addEventListener('message', event => {
+        console.log(event.data.msg, event.data.url);
+        if( event.data.msg == 'repaint' ) {
+            // The service worker received fresh data and wants us to update
+            // This should maybe be(come) screen != config
+            if(state.screen == '3day') {
+                render(state);
+            }
+        };
+    });
 };
+
+function update_positions( coords ) {
+    if(    state.locations[0].latitude != position.coords.latitude
+        || state.locations[0].longitude != position.coords.longitude
+    ) {
+        state.locations[0].latitude = position.coords.latitude;
+        state.locations[0].longitude = position.coords.longitude;
+        // Fetch data for the current location, as it has changed from
+        // the previous current location
+    }
+}
+
+if ("geolocation" in navigator) {
+    // We can update the current location if wanted
+    navigator.geolocation.getCurrentPosition(function(position) {
+        update_position(position.coords);
+    });
+} else {
+}
 
 let deferredPrompt;
 
@@ -223,59 +275,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
          item => Array.isArray(item)         ? clone(item)
                : typeof( item ) === 'object' ? Object.assign({}, item )
                : item);
-
-    function update_image( input, index, target_id ) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onloadend = function (e) {
-                // resize here so we have a small image
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement("canvas");
-                    // Figure out whether it's landscape or portrait
-                    if( img.width > img.height ) {
-                        canvas.width = 320;
-                        canvas.height = canvas.width * (img.height/img.width);
-                    } else {
-                        canvas.width = canvas.height * (img.width/img.height);
-                        canvas.height = 320;
-                    }
-
-                    let context = canvas.getContext("2d");
-
-                    context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    // XXX We store the data: url, instead of a blob.
-                    // ... That's not nice, but oh so convenient
-                    state.current_config.choices[index].image = canvas.toDataURL();
-                    update(state);
-                };
-                img.src = e.target.result;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    /* Fisher-Yates shuffle */
-    function shuffle(a) {
-        let b = a.slice(); // make a copy
-        for (let i = b.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [b[i], b[j]] = [b[j], b[i]];
-        }
-        return b;
-    }
-
-    function action_shuffle() {
-        state.randomized_choices = shuffle(state.choices);
-        update(state);
-    };
-    function action_select() {
-        let s = shuffle(state.choices);
-        state.randomized_choices = [s[0]];
-        update(state);
-    };
 </script>
 </head>
 <body onload="javascript:init()">

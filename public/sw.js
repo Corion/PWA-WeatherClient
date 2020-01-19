@@ -35,6 +35,25 @@ self.addEventListener('fetch', function(event) {
     caches.match(event.request).then(function(response) {
       // Fall back to network
       return response // || fetch(event.request);
+
+      // Fetch data online, cache locally
+      /*
+      caches.open(cacheName).then(function(cache) {
+          return fetch(event.request).then(function(response) {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+      })
+      */
+
+      // Inform the client that they should update their stuff
+      /*
+           client.postMessage({
+             msg: "Hey I just got a fetch from you!",
+             url: event.request.url
+           });
+      */
+
     }).catch(function() {
       // If both fail, show a generic fallback:
       return caches.match('/offline.html');
