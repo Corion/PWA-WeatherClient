@@ -218,14 +218,20 @@ if ('serviceWorker' in navigator) {
     });
 };
 
-function update_positions( coords ) {
-    if(    state.locations[0].latitude != position.coords.latitude
-        || state.locations[0].longitude != position.coords.longitude
+function update_position( coords ) {
+    if(    state.locations[0].latitude  != coords.latitude
+        || state.locations[0].longitude != coords.longitude
     ) {
-        state.locations[0].latitude = position.coords.latitude;
-        state.locations[0].longitude = position.coords.longitude;
+        state.locations[0].latitude  = coords.latitude;
+        state.locations[0].longitude = coords.longitude;
         // Fetch data for the current location, as it has changed from
         // the previous current location
+
+        state.locations[0].forecast[0].description = "updated:"
+            + " lat : " + state.locations[0].latitude
+            + " long: " + state.locations[0].longitude
+            ;
+
         // Instead we should mark the screen as dirty so we can lazily update
         if(state.screen == 'screen_3day') {
             render_3day(state);
@@ -236,6 +242,7 @@ function update_positions( coords ) {
 if ("geolocation" in navigator) {
     // We can update the current location if wanted
     navigator.geolocation.getCurrentPosition(function(position) {
+    console.log(position);
         update_position(position.coords);
     });
 } else {
