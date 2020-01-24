@@ -211,8 +211,8 @@ if ('serviceWorker' in navigator) {
         if( event.data.msg == 'repaint' ) {
             // The service worker received fresh data and wants us to update
             // This should maybe be(come) screen != config
-            if(state.screen == '3day') {
-                render(state);
+            if(state.screen == 'screen_3day') {
+                render_3day(state);
             }
         };
     });
@@ -226,6 +226,10 @@ function update_positions( coords ) {
         state.locations[0].longitude = position.coords.longitude;
         // Fetch data for the current location, as it has changed from
         // the previous current location
+        // Instead we should mark the screen as dirty so we can lazily update
+        if(state.screen == 'screen_3day') {
+            render_3day(state);
+        }
     }
 }
 
