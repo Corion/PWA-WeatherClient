@@ -34,7 +34,7 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
-    {{#each current_config.choices}}<li><input value="{{name}}" type="text" onblur="javascript:store_value(state,this.value,'current_config.choices.%d.name',{{@index}})"/>
+    {{#each current_config.locations}}<li><div>{{forecast.0.description}}</div></li>{{/each}}
     <button onclick="javascript:action_config_save();">Save</button><button onclick="javascript:action_config_cancel()">Cancel</button>
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
@@ -189,8 +189,8 @@
         state.screen = 'screen_config';
 
         state.current_config = {
-            "choices": clone(state.choices),
-            "delay"  : state.delay
+            "locations": clone(state.locations),
+            "delay"    : state.delay
         };
 
         update(state);
