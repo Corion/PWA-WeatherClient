@@ -2,8 +2,8 @@
   "manifest_version":2,
   "version": "20190728.0002",
   "author":"Max Maischein",
-  "short_name": "RandomSelect",
-  "name": "RandomSelect - who's on first?",
+  "short_name": "Weather Client",
+  "name": "Weather Client - what's the weather?",
   "icons": [
     {
       "src": "launcher-icon-1x.png",

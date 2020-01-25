@@ -1,5 +1,5 @@
 /* Simple cache web service worker for PWAs */
-let cacheName = 'RandomSelect-cache';
+let cacheName = 'WeatherClient-cache';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
