@@ -217,11 +217,29 @@
     // to mark the current display as potentially dirty without even queueing
     // a repaint?! Or do we simply always repaint?!
 
+    function loadForecastCache() {
+        return localforage.getItem("forecast-cache").then(result => {
+            return result
+        }).catch( () => {
+            console.log("Error retrieving cache?!")
+        });
+    }
+
+    function forecast_information_received(info) {
+        // Update the new state from the data
+        for( var i in state.locations ) {
+            state.locations[i].forecast = info.forecast[i];
+        };
+
+        // Update our HTML if we are displaying forecast data
+        render_3day(state);
+    }
+
     /* Fetch the locations (and other stuff?) via HTTP */
     /* We do all the caching in the client instead of trying to do HTTP
        caching, since we must invalidate the data manually anyway
     */
-    function fetch_location_weather(locations) {
+    async function fetch_location_weather(locations) {
         let url = "./forecast";
         let payload = [];
         for( var i in locations ) {
@@ -231,7 +249,7 @@
             });
         };
         payload = { locations : payload };
-        fetch(url,
+        await fetch(url,
             {
                 method: "POST",
                 headers: { "Content-Type":"application/json" },
@@ -246,14 +264,12 @@
                     response.forecast[i][j].maxtemp = Math.round(response.forecast[i][j].maxtemp -273.1,0);
                 }
             };
-            // Update the new state from the data
-            for( var i in state.locations ) {
-                state.locations[i].forecast = response.forecast[i];
-            };
-            // Cache the received weather data in our "config"
+
+            forecast_information_received(response);
+
+            // Cache the received weather data in our cache
             // for lack of a better place
-            // Update our HTML if we are displaying forecast data
-            render_3day(state);
+            return localforage.setItem("forecast-cache", response);
         })
     }
 
@@ -338,10 +354,18 @@ window.addEventListener('beforeinstallprompt', (e) => {
     }
 
     function init() {
-        loadConfig().then(function(appState) {
+        loadConfig().then(appState => {
             //state = appState || default_state;
             state = default_state;
-            render_3day(state);
+        }).then(() => {
+            return loadForecastCache()
+        }).then( forecast => {
+            if( forecast ) {
+                console.log("Fetched forecast from localforage", forecast);
+                forecast_information_received( forecast );
+            } else {
+                // We don't have anything cached, so we need to fetch it online
+            }
         });
     }
 
