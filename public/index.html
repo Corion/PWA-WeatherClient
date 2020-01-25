@@ -202,15 +202,33 @@
     */
     function fetch_location_weather(locations) {
         let url = "./forecast";
+        let payload = [];
+        for( var i in locations ) {
+            payload.push({
+                "longitude" : locations[i].longitude,
+                "latitude"  : locations[i].latitude
+            });
+        };
+        payload = { locations : payload };
         fetch(url,
             {
                 method: "POST",
                 headers: { "Content-Type":"application/json" },
-                body: JSON.stringify(locations)
+                body: JSON.stringify(payload)
             },
-        ).then(locations => {
+        ).then(response => response.json()
+        ).then(response => {
+            // Normalize our data to °C
+            for( var i in response.forecast ) {
+                for( var j in response.forecast[i] ) {
+                    response.forecast[i][j].mintemp = Math.round(response.forecast[i][j].mintemp -273.1,0);
+                    response.forecast[i][j].maxtemp = Math.round(response.forecast[i][j].maxtemp -273.1,0);
+                }
+            };
             // Update the new state from the data
-            state.locations = locations;
+            for( var i in state.locations ) {
+                state.locations[i].forecast = response.forecast[i];
+            };
             // Cache the received weather data in our "config"
             // for lack of a better place
             // Update our HTML if we are displaying forecast data
@@ -257,6 +275,7 @@ function update_position( coords ) {
             + " long: " + state.locations[0].longitude
             ;
 
+        fetch_location_weather(state.locations);
         // Instead we should mark the screen as dirty so we can lazily update
         if(state.screen == 'screen_3day') {
             render_3day(state);
@@ -267,7 +286,6 @@ function update_position( coords ) {
 if ("geolocation" in navigator) {
     // We can update the current location if wanted
     navigator.geolocation.getCurrentPosition(function(position) {
-    console.log(position);
         update_position(position.coords);
     });
 } else {
