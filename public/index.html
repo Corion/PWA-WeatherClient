@@ -49,6 +49,7 @@
 
         locations: [
             { name: "current", latitude: 50, longitude: 8,
+              "image-url":"about:blank",
               "forecast-radius": 100,
               // the forecast radius is the circle around the center
               // if we leave that, we want to fetch a new forecast as we might
@@ -84,7 +85,10 @@
                   { description: "Frankfurt, Zeil", mintemp: 8, maxtemp: 14, emoji: ".", weekday: "So", hour: 18 },
               ] },
         ],
-        current_config: {},
+        current_config: {
+            // How many meters do we need to move before fetching a weather update for the "current" location?
+            minimum_distance: 1000,
+        },
         state_install_prompt: "not_asked",
         screen: "screen_3day"
     };
