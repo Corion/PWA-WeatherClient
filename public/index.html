@@ -289,8 +289,14 @@
 
             // Cache the received weather data in our cache
             // for lack of a better place
-            return localforage.setItem("forecast-cache", response);
+            return localforage.setItem("forecast-cache",
+                { "fetched":Date.now(), response });
         })
+    }
+
+    function forecast_information_stale(info) {
+           ! info.last_fetch
+        || (Date.now() - info.last_fetch) > 4*60*60*1000 // 4 hours, make configurable later
     }
 
 /* Launch our service worker as cache */
@@ -379,12 +385,15 @@ window.addEventListener('beforeinstallprompt', (e) => {
             state = default_state;
         }).then(() => {
             return loadForecastCache()
-        }).then( forecast => {
-            if( forecast ) {
-                console.log("Fetched forecast from localforage", forecast);
-                forecast_information_received( forecast );
+        }).then( forecast_info => {
+            if( forecast_info ) {
+                console.log("Fetched forecast from localforage", forecast_info);
+                forecast_information_received( forecast_info.response );
             } else {
                 // We don't have anything cached, so we need to fetch it online
+                schedule_weather_update();
+                // but first, paint a placeholder
+                render_3day(state);
             }
         });
     }
