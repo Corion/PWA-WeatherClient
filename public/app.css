@@ -4,7 +4,7 @@
 
 
 div.location-description {
-    font-size: 24pt;
+    font-size: 18pt;
     text-align: center;
 }
 
@@ -34,6 +34,6 @@ table {
     width: 100%;
 }
 
-th {
+th, td {
     text-align: center;
 }
