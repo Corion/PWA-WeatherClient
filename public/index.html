@@ -338,11 +338,13 @@ function update_position( coords ) {
             + " long: " + state.locations[0].longitude
             ;
 
-        fetch_location_weather(state.locations);
+        schedule_weather_update();
         // Instead we should mark the screen as dirty so we can lazily update
+        /*
         if(state.screen == 'screen_3day') {
             render_3day(state);
         }
+        */
     }
 }
 
