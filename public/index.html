@@ -389,7 +389,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
             return loadForecastCache()
         }).then( forecast_info => {
             if( forecast_info ) {
-                console.log("Fetched forecast from localforage", forecast_info);
+                // console.log("Fetched forecast from localforage", forecast_info);
+
+                // Remove the forecast for the current location if we
+                // don't know it/have it/whatever?!
+                // We don't want to overwrite the current GPS location with
+                // the cached data!
+
                 forecast_information_received( forecast_info.response );
             } else {
                 // We don't have anything cached, so we need to fetch it online
