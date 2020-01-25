@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Mojolicious::Lite;
 use Mojo::JSON qw(decode_json encode_json);
+use charnames ':full';
 
 use lib '../Weather-MOSMIX/lib';
 use Weather::MOSMIX;
@@ -23,7 +24,6 @@ get '/' => sub {
 };
 
 post '/forecast' => sub {
-    warn "Generating weather forecast";
     my $c = shift;
     my $query = decode_json( $c->req->body );
     my @locations = @{ $query->{'locations'} };
@@ -33,11 +33,11 @@ post '/forecast' => sub {
         my $f =
             $w->forecast_dbh(latitude => $l->{latitude}, longitude => $l->{longitude} );
         my $out = $w->format_forecast_dbh( $f, 6 );
+        #$out->[0]->{utf8} = "\N{CHECK MARK}";
         push @res, $out;
     };
-    use Data::Dumper; warn Dumper \@res;
-
-    $c->render(json => { forecast => \@res } );
+    my $res = { forecast => \@res };
+    $c->render( json => $res );
 };
 
 
