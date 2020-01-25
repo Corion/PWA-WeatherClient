@@ -225,6 +225,16 @@
         });
     }
 
+    let forecast_fetch_running;
+    function schedule_weather_update() {
+        if( ! forecast_fetch_running ) {
+            forecast_fetch_running = window.setTimeout(function() {
+                forecast_fetch_running = undefined;
+                fetch_location_weather(state.locations);
+            }, 5000);
+        }
+    };
+
     function forecast_information_received(info) {
         // Update the new state from the data
         for( var i in state.locations ) {
@@ -233,6 +243,16 @@
 
         // Update our HTML if we are displaying forecast data
         render_3day(state);
+
+        // If it is stale, request new information
+        // This shouldn't happen here, but in the main app, ideally far
+        // more asynchronously and rate limited
+        // Waiting for
+        // https://github.com/WICG/BackgroundSync/blob/master/explainers/periodicsync-explainer.md
+        // to become reality
+        if( forecast_information_stale(info)) {
+            schedule_weather_update()
+        }
     }
 
     /* Fetch the locations (and other stuff?) via HTTP */
