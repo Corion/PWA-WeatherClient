@@ -176,8 +176,21 @@
     };
 
     function update(state) {
+        // Maybe we want to use window.requestAnimationFrame to do the
+        // repainting in an idle way
+        // if(! queued_repaint) {
+        //     queued_repaint = window.requestAnimationFrame(timestamp => {
+        //         render_screen(state.screen, state)
+        //     })
+        //  }
+        //
         render_screen(state.screen, state);
     }
+
+    // We also want
+    // function data_updated(state) {
+    // to mark the current display as potentially dirty without even queueing
+    // a repaint?! Or do we simply always repaint?!
 
     /* Fetch the locations (and other stuff?) via HTTP */
     /* We do all the caching in the client instead of trying to do HTTP
