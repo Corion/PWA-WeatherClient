@@ -34,7 +34,10 @@ self.addEventListener('fetch', function(event) {
     // Try the cache
     caches.match(event.request).then(function(response) {
       // Fall back to network
-      return response // || fetch(event.request);
+      if( response )
+        return response;
+      console.log("Returnng network request via fetch()");
+      return fetch(event.request);
 
       // Fetch data online, cache locally
       /*
