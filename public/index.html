@@ -14,10 +14,8 @@
     -->
 <script type="text/x-handlebars-template" id="screen_3day">
     {{#if installOnHomescreen}}<a href="#" onclick="javascript:installOnHomescreen();">Install to home screen</a>{{/if}}
-    <!--
-    <button onclick="javascript:action_shuffle()">Shuffle</button>
-    <button onclick="javascript:action_select()">Select</button>
-    -->
+    <button onclick="javascript:action_refresh()">Refresh</button>
+
     <div class="locations">
         <div class="location-border"></div>
     {{#each locations}}<div class="location">
@@ -138,6 +136,10 @@
 
     function action_config_cancel() {
         render_3day(state);
+    }
+
+    function action_refresh() {
+        fetch_location_weather(state.locations)
     }
 
     function morph(DOM,html,options) {
