@@ -67,10 +67,15 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-self.addEventListener('sync', function(event) {
+async function onUpdateForecast(syncEvent) {
+    // we could look at syncEvent.lastChance, but why?
+}
+
+self.addEventListener('sync', async function(event) {
     if (event.tag == 'update-forecast') {
         // Fetch the forecast in the background
         console.log("Would do a background sync update");
+        event.waitUntil(onUpdateForecast(event));
     }
 });
 

@@ -227,6 +227,9 @@
 
     let forecast_fetch_running;
     function schedule_weather_update() {
+        // We should just do a background sync request here, which will
+        // do the retry logic etc. using the browser instead of using timeout
+        // but Firefox doesn't support background sync...
         if( ! forecast_fetch_running ) {
             forecast_fetch_running = window.setTimeout(function() {
                 forecast_fetch_running = undefined;
@@ -304,16 +307,20 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
         .then(registration => {
-            console.log('Service Worker is registered', registration);
-            registration.update();
-
+            // console.log('Service Worker is registered', registration);
+            return registration.update();
+        }).then( registration => {
+            // console.log('Background service updated', registration);
             if(registration.sync) { /* we can fetch forecasts in the background */
                 /* Our service worker will now get the "update-forecast" event */
                 console.log('Background forecast updates enabled');
-                registration.sync.register('update-forecast')
-                .catch(function(err) {
-                    return err;
-                });
+                // Note that we _can_ schedule background updates
+                // then, in schedule_update(), check that and use it instead
+                // of manually fetching
+                // registration.sync.register('update-forecast')
+                // .catch(function(err) {
+                //     return err;
+                // });
             };
         })
         .catch(err => {
@@ -398,6 +405,7 @@ function init() {
     }).then(() => {
         return loadForecastCache()
     }).then( forecast_info => {
+        console.log("Got forecast",forecast_info);
         if( forecast_info ) {
             // console.log("Fetched forecast from localforage", forecast_info);
 
@@ -412,7 +420,7 @@ function init() {
                 || Date.now() - forecast_info.fetched > 60*60*1000 ) {
                 console.log("Last forecast is stale, fetching new", forecast_info.fetched);
                 schedule_weather_update();
-            }
+            };
 
             forecast_information_received( forecast_info.response );
         } else {
