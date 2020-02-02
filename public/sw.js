@@ -36,7 +36,7 @@ self.addEventListener('fetch', function(event) {
       // Fall back to network
       if( response )
         return response;
-      console.log("Returnng network request via fetch()");
+      console.log("Returning network request via fetch()");
       return fetch(event.request);
 
       // Fetch data online, cache locally
@@ -65,6 +65,13 @@ self.addEventListener('fetch', function(event) {
       // Eg, a fallback silhouette image for avatars.
     })
   );
+});
+
+self.addEventListener('sync', function(event) {
+    if (event.tag == 'update-forecast') {
+        // Fetch the forecast in the background
+        console.log("Would do a background sync update");
+    }
 });
 
 /* Evict outdated stuff resp. update our new cache */

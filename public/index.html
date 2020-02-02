@@ -306,6 +306,15 @@ if ('serviceWorker' in navigator) {
         .then(registration => {
             console.log('Service Worker is registered', registration);
             registration.update();
+
+            if(registration.sync) { /* we can fetch forecasts in the background */
+                /* Our service worker will now get the "update-forecast" event */
+                console.log('Background forecast updates enabled');
+                registration.sync.register('update-forecast')
+                .catch(function(err) {
+                    return err;
+                });
+            };
         })
         .catch(err => {
             console.error('Registration failed:', err);
