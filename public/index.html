@@ -367,51 +367,59 @@ window.addEventListener('beforeinstallprompt', (e) => {
     state.installOnHomeScreen = 'ask';
 });
 
-    function installOnHomescreen() {
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice
-            .then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the A2HS prompt');
-                } else {
-                    console.log('User dismissed the A2HS prompt');
-                }
-                deferredPrompt = null;
-                state.installOnHomeScreen = '';
-            });
-    }
-
-    function init() {
-        loadConfig().then(appState => {
-            //state = appState || default_state;
-            state = default_state;
-        }).then(() => {
-            return loadForecastCache()
-        }).then( forecast_info => {
-            if( forecast_info ) {
-                // console.log("Fetched forecast from localforage", forecast_info);
-
-                // Remove the forecast for the current location if we
-                // don't know it/have it/whatever?!
-                // We don't want to overwrite the current GPS location with
-                // the cached data!
-
-                forecast_information_received( forecast_info.response );
+function installOnHomescreen() {
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice
+        .then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
             } else {
-                // We don't have anything cached, so we need to fetch it online
-                schedule_weather_update();
-                // but first, paint a placeholder
-                render_3day(state);
+                console.log('User dismissed the A2HS prompt');
             }
+            deferredPrompt = null;
+            state.installOnHomeScreen = '';
         });
-    }
+}
 
-    /* Array deep clone */
-    const clone = (items) => items.map(
-         item => Array.isArray(item)         ? clone(item)
-               : typeof( item ) === 'object' ? Object.assign({}, item )
-               : item);
+function init() {
+    loadConfig().then(appState => {
+        //state = appState || default_state;
+        state = default_state;
+    }).then(() => {
+        return loadForecastCache()
+    }).then( forecast_info => {
+        if( forecast_info ) {
+            // console.log("Fetched forecast from localforage", forecast_info);
+
+            // Remove the forecast for the current location if we
+            // don't know it/have it/whatever?!
+            // We don't want to overwrite the current GPS location with
+            // the cached data!
+
+            // If the current forecast is older than 60 minutes, schedule
+            // fetching an updated forecast
+            if(    !forecast_info.fetched
+                || Date.now() - forecast_info.fetched > 60*60*1000 ) {
+                console.log("Last forecast is stale, fetching new", forecast_info.fetched);
+                schedule_weather_update();
+            }
+
+            forecast_information_received( forecast_info.response );
+        } else {
+            // We don't have anything cached, so we need to fetch it online
+            schedule_weather_update();
+            // but first, paint a placeholder
+            render_3day(state);
+        }
+    });
+}
+
+/* Array deep clone */
+const clone = (items) => items.map(
+     item => Array.isArray(item)         ? clone(item)
+           : typeof( item ) === 'object' ? Object.assign({}, item )
+           : item);
 </script>
 </head>
 <body onload="javascript:init()">
