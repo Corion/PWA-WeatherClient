@@ -350,6 +350,7 @@ function update_position( coords ) {
 
 if ("geolocation" in navigator) {
     // We can update the current location if wanted
+    // XXX this should become a config item
     navigator.geolocation.watchPosition(function(position) {
         update_position(position.coords);
     });
