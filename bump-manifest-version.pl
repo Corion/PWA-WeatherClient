@@ -6,7 +6,8 @@ use Pod::Usage;
 use POSIX 'strftime';
 
 GetOptions(
-    'f|file=s' => \my $manifest,
+    'f' => \my $force,
+    'm|manifest=s' => \my $manifest,
     'service-worker=s' => \my $sw_file,
     'version=s' => \my $version,
 ) or pod2usage(2);
@@ -56,7 +57,7 @@ if( not defined $version ) {
     $manifest_time = 0;
 }
 
-if( $mtime > $manifest_time ) {
+if( $mtime > $manifest_time or $force) {
     open my $fh, '<:raw', $manifest
         or die "Couldn't read '$manifest': $!";
 
