@@ -21,7 +21,7 @@ my $w = Weather::MOSMIX->new(
 #};
 get '/' => sub {
     my $c = shift;
-    $c->reply->static('index.html');
+    return $c->redirect_to('index.html');
 };
 
 post '/forecast' => sub {
