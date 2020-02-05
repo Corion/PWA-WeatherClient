@@ -9,6 +9,8 @@ use FindBin;
 use lib "$FindBin::Bin/../../Weather-MOSMIX/lib";
 use Weather::MOSMIX;
 
+push @{app->static->paths} => "$FindBin::Bin/../public";
+
 my $w = Weather::MOSMIX->new(
     dsn => 'dbi:SQLite:dbname=../../Weather-MOSMIX/db/forecast.sqlite',
 );
