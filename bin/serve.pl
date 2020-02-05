@@ -6,11 +6,11 @@ use Mojo::JSON qw(decode_json encode_json);
 use charnames ':full';
 
 use FindBin;
-use lib "$FindBin::Bin/../Weather-MOSMIX/lib";
+use lib "$FindBin::Bin/../../Weather-MOSMIX/lib";
 use Weather::MOSMIX;
 
 my $w = Weather::MOSMIX->new(
-    dsn => 'dbi:SQLite:dbname=../Weather-MOSMIX/db/forecast.sqlite',
+    dsn => 'dbi:SQLite:dbname=../../Weather-MOSMIX/db/forecast.sqlite',
 );
 
 # Route with placeholder
