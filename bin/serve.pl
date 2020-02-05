@@ -5,12 +5,8 @@ use Mojolicious::Lite;
 use Mojo::JSON qw(decode_json encode_json);
 use charnames ':full';
 
-BEGIN {
-    use File::Basename;
-    chdir dirname($0);
-}
-
-use lib '../Weather-MOSMIX/lib';
+use FindBin;
+use lib "$FindBin::Bin/../Weather-MOSMIX/lib";
 use Weather::MOSMIX;
 
 my $w = Weather::MOSMIX->new(
