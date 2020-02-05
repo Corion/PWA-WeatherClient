@@ -45,7 +45,7 @@ my %module = (
 
     PREREQ_PM => {
         'Filter::signatures'      => 0,
-        'Weather::MOSMIX'         => 0,
+        #'Weather::MOSMIX'         => 0,
         'Mojolicious'             => 8,
         'Plack::Loader'           => 0,
     },
