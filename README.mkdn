@@ -1,47 +1,7 @@
-# RandomSelect
 
-A small PWA to do a random selection or random ordering of a set of items.
+[![Travis Build Status](https://travis-ci.org/Corion/PWA-WeatherClient.svg?branch=master)](https://travis-ci.org/Corion/PWA-WeatherClient)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Corion/PWA-WeatherClient?branch=master&svg=true)](https://ci.appveyor.com/project/Corion/PWA-WeatherClient)
 
-This is mainly intended to give a fair/independent order in which kids enter
-the car without any discussion. Also, it is a nice toy example of a PWA
-with very little external dependencies.
+# NAME
 
-## Application Logic
-
-All application state lives in the variable `state`. The three "pages" of the
-application are rendered from that `state`. Whenever `state` is changed, a call
-to `update()` redraws the current page. This moves all application logic
-into setting up parts of `state` and calling `update()` afterwards to redraw
-the world.
-
-## Functionality Provided by External Javascript Modules
-
-### Templating - [Handlebars.js](https://handlebarsjs.com/reference.html)
-
-Currently the templates are not precompiled to Javascript. This means that we
-don't need any build infrastructure either and can get by by simply moving some
-of the work to runtime.
-
-### DOM modification - [morphdom](https://github.com/patrick-steele-idem/morphdom)
-
-This compares our HTML template string to the current DOM and updates the
-current DOM to match the HTML template string. This keeps the scroll position
-and whatever other state in the DOM so we don't lose that, compared to the
-(quicker) method of simply updating `innerHTML`.
-
-### Persistence - [localForage](https://localforage.github.io/localForage/)
-
-The setup should persist between invocations. localForage gives us a nice
-wrapper for browser-local storage.
-
-# TODO
-
-* Add mobile-friendly CSS / screen setup
-* Implement offline features
-  * Code caching
-  * Start screen
-* Precompile templates to Javascript
-* Implement selection animation
-  * Spin names/images for `delay` seconds
-* Implement locking re-selection
-* Add documentation to the Config screen
+PWA::WeatherClient - placeholder
