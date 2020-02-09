@@ -12,15 +12,9 @@ use Weather::MOSMIX;
 push @{app->static->paths} => "$FindBin::Bin/../public";
 
 my $w = Weather::MOSMIX->new(
-    dsn => 'dbi:SQLite:dbname=../../Weather-MOSMIX/db/forecast.sqlite',
+    dsn => "dbi:SQLite:dbname=$FindBin::Bin/../../Weather-MOSMIX/db/forecast.sqlite",
 );
 
-# Route with placeholder
-#get '/:foo' => sub {
-#    my $c   = shift;
-#    my $foo = $c->param('foo');
-#    $c->render(text => "Hello from $foo.");
-#};
 get '/' => sub {
     my $c = shift;
     return $c->redirect_to('index.html');
