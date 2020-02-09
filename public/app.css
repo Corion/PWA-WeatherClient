@@ -40,3 +40,7 @@ th {
 td {
     text-align: center;
 }
+
+span.temperature {
+    width: 9em;
+}
