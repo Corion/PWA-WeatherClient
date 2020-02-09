@@ -10,6 +10,7 @@ self.addEventListener('install', function(event) {
           '/index.html',
           '/sw.js',
           '/manifest.json',
+          '/locations.json',
           '/js/localforage.min-1.7.3.js',
           '/js/handlebars-v4.1.2.js',
           '/js/morphdom-2.5.4.js',

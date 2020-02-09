@@ -37,6 +37,12 @@ post '/forecast' => sub {
     $c->render( json => $res );
 };
 
+# This is available as a static file already
+#get '/locations.json' => sub {
+#    my $c = shift;
+#    my $res = $w->locations();
+#    $c->render( json => $res );
+#};
 
 
 # Start the Mojolicious command system
