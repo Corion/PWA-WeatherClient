@@ -261,7 +261,9 @@
         };
 
         // Update our HTML if we are displaying forecast data
-        render_3day(state);
+        if(state.screen === 'screen_3day') {
+            render_3day(state);
+        };
 
         // If it is stale, request new information
         // This shouldn't happen here, but in the main app, ideally far
