@@ -34,7 +34,7 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
-    {{#each current_config.locations}}<li><div>{{forecast.0.description}}</div><button onclick="javascript:remove_location()">x</button></li>{{/each}}
+    {{#each current_config.locations}}<li><span>{{forecast.0.description}}</span><button onclick="javascript:remove_location()">x</button></li>{{/each}}
     </ul>
     <label for="input-locations">Location:</label></label><input id="input-locations" type="text" list="locations">
     <button onclick="javascript:add_location();">Add</button>
