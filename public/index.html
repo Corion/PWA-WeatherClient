@@ -34,8 +34,15 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
-    {{#each current_config.locations}}<li><div>{{forecast.0.description}}</div></li>{{/each}}
+    {{#each current_config.locations}}<li><div>{{forecast.0.description}}</div><button onclick="javascript:remove_location()">x</button></li>{{/each}}
+    </ul>
+    <label for="input-locations">Location:</label></label><input id="input-locations" type="text" list="locations">
+    <button onclick="javascript:add_location();">Add</button>
+    <hr />
     <button onclick="javascript:action_config_save();">Save</button><button onclick="javascript:action_config_cancel()">Cancel</button>
+    <datalist id="locations">
+        {{#each current_config.forecast_locations}}<option data-value="lat/long {{position}}">{{description}}</option>{{/each}}
+    </datalist>
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
     <h1>Weather display</h1>
@@ -190,7 +197,16 @@
 
         state.current_config = {
             "locations": clone(state.locations),
-            "delay"    : state.delay
+            "delay"    : state.delay,
+            // we should keep these in a separate file and fetch them from
+            // the cache on page load instead of hardcoding. Postponed
+            // until we encounter the problem.
+            forecast_locations : [
+                { description: "Location 1", position: "0.0, 7.0" },
+                { description: "Location 2", position: "0.0, 8.0" },
+                { description: "Location 3", position: "0.0, 9.0" },
+                { description: "Location 4", position: "0.0, 10.0" },
+            ],
         };
 
         update(state);
