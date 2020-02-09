@@ -34,10 +34,10 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
-    {{#each current_config.locations}}<li><span>{{forecast.0.description}}</span><button onclick="javascript:remove_location()">x</button></li>{{/each}}
+    {{#each current_config.locations}}<li><span>{{forecast.0.description}}</span><button onclick="javascript:remove_location({{@index}})">x</button></li>{{/each}}
     </ul>
     <label for="input-locations">Location:</label></label><input id="input-locations" type="text" list="locations">
-    <button onclick="javascript:add_location();">Add</button>
+    <button onclick="javascript:add_location('input-locations');">Add</button>
     <hr />
     <button onclick="javascript:action_config_save();">Save</button><button onclick="javascript:action_config_cancel()">Cancel</button>
     <datalist id="locations">
@@ -130,13 +130,27 @@
         return value
     };
 
-    function remove_choice(index) {
-        state.current_config.choices.splice(index,1);
+    function remove_location(index) {
+        state.current_config.locations.splice(index,1);
         update(state);
     }
 
-    function add_choice() {
-        state.current_config.choices.push({});
+    function add_location(id) {
+        let el = document.getElementById(id);
+        let val = el.value;
+
+        // Now, find what the user selected/typed, and add that location:
+        let loc = forecast_locations.find(loc => {
+            return loc.description.toLowerCase() == val.toLowerCase()
+        });
+        if( loc ) {
+            state.current_config.locations.push({
+                "description" : loc.description,
+                "longitude"   : loc.longitude,
+                "latitude"    : loc.latitude,
+                "forecast"    : [{ description: loc.description }],
+            });
+        };
         update(state);
     }
 
@@ -152,13 +166,16 @@
     function storeConfig(config) {
         //var blob = new Blob([image]);
         //var imageURI = window.URL.createObjectURL(blob);
-        return localforage.setItem("config", config, function() {})
+        return localforage.setItem("config", config, () => {
+            // console.log("Stored config")
+        })
     };
 
     function action_config_save() {
-        state.choices = state.current_config.choices.slice();
-        state.delay   = state.current_config.delay;
+        state.locations = state.current_config.locations.slice();
+        state.delay     = state.current_config.delay;
         storeConfig(state);
+        schedule_weather_update();
         render_3day(state);
     };
 
@@ -415,8 +432,8 @@ function installOnHomescreen() {
 
 function init() {
     loadConfig().then(appState => {
-        //state = appState || default_state;
-        state = default_state;
+        state = appState || default_state;
+        //state = default_state;
     }).then(() => {
         return loadForecastCache()
     }).then( forecast_info => {
