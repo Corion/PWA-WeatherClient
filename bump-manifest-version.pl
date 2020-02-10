@@ -36,7 +36,7 @@ my $sw = do { local $/; <$fh> };
 $sw =~ m!cache.addAll\(\s+\[([^\]]+)\]!ms
     or die "Couldn't read cache.addAll() stanza from '$sw_file'";
 my $cache_string = $1;
-my @cached_files = map { "public$_" } ($cache_string =~ /^\s+'([^']+)'/mg);
+my @cached_files = map { "public/$_" } ($cache_string =~ /^\s+'([^']+)'/mg);
 
 my $mtime = (stat($manifest))[9];
 my $manifest_time = $mtime;
