@@ -8,6 +8,7 @@ self.addEventListener('install', function(event) {
       return cache.addAll(
         [ /* All resources that are fit to store */
           '/index.html',
+          '/changes.html',
           '/sw.js',
           '/manifest.json',
           '/locations.json',
