@@ -5,6 +5,6 @@ ASSETS := $(addsuffix .gz,$(wildcard *.js *.css *.html *.json js/*.js css/*.css)
 .PHONY: deploy
 
 %.gz: %
-	gzip -k9 $<
+	gzip -fk9 $<
 
 deploy: $(ASSETS)
