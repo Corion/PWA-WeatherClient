@@ -47,13 +47,21 @@
 </script>
 <script type="text/x-handlebars-template" id="screen_about">
     <h1>Weather display</h1>
-    <div>About this app</div>
-    <h1>Data Usage (GDPR/DSGVO)</h1>
+    <h2>About this app</h2>
+    <p>This application renders free weather data from the Deutscher
+       Wetterdienst.</p>
+    <iframe frameborder="0" src="changes.html" width="100%"
+        onload="this.style.height = this.contentWindow.document.documentElement.scrollHeight + 'px';" >Loading version information
+    </iframe>
+    <details>
+    <summary><h2>Data Usage (GDPR/DSGVO)</h2>
     <p>This application shares your list of locations and current position
        with the server to fetch the weather information for these locations.
        This information is processed server side for providing the weather
        forecast information.
        </p>
+       <p>Click for more information</p>
+    </summary>
     <h2>What data do we collect</h2>
     <p>The web server logs collect the user agent information as is sent with
        every request your browser makes. The location information is not saved
@@ -67,6 +75,7 @@
     <p>The access data is kept in a log file server side and used for debugging
        and troubleshooting. It is erased periodically and not kept longer than
        12 months after the data was sent by your device.</p>
+    </details>
 </script>
 <script>
     var default_state = {
@@ -484,7 +493,10 @@ const clone = (items) => items.map(
 </script>
 </head>
 <body onload="javascript:init()">
-<div id="header"><a href="#" onclick="javascript:render_3day(state);">Forecast</a> | <a href="#" onclick="javascript:render_about(state);">About</a> | <a href="#" onclick="render_config(state)">Config</a></div>
+<div id="header"><a href="#" onclick="javascript:render_3day(state);">Forecast</a>
+               | <a href="#" onclick="javascript:render_about(state);">About</a>
+               | <a href="#" onclick="javascruot:render_config(state)">Config</a>
+</div>
 <div id="screen">
     <p>Javascript is not enabled?!</p>
     <p>I'm sorry, but this app doesn't make sense without Javascript.</p>
