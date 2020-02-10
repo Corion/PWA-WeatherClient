@@ -11,6 +11,12 @@ use Weather::MOSMIX;
 
 push @{app->static->paths} => "$FindBin::Bin/../public";
 
+# If we have a precompressed resource, serve that
+app->static->with_roles('+Compressed');
+
+# Compress all dynamic resources as well
+plugin 'Gzip';
+
 my $w = Weather::MOSMIX->new(
     dsn => "dbi:SQLite:dbname=$FindBin::Bin/../../Weather-MOSMIX/db/forecast.sqlite",
 );
