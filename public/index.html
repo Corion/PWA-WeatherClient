@@ -274,7 +274,7 @@
             forecast_fetch_running = window.setTimeout(function() {
                 forecast_fetch_running = undefined;
                 fetch_location_weather(state.locations);
-            }, 5000);
+            }, 10);
         }
     };
 
@@ -283,6 +283,7 @@
         for( var i in state.locations ) {
             state.locations[i].forecast = info.forecast[i];
         };
+        state.fetched = info.fetched;
 
         // Update our HTML if we are displaying forecast data
         if(state.screen === 'screen_3day') {
@@ -342,6 +343,17 @@
     function forecast_information_stale(info) {
            ! info.last_fetch
         || (Date.now() - info.last_fetch) > 4*60*60*1000 // 4 hours, make configurable later
+    }
+
+    function handle_visibility_change() {
+            console.log("Focus change", document.visibilityState);
+        if( document.visibilityState === 'visible' ) {
+            console.log("We got the focus again");
+            // User just switched to us, maybe we can fetch an update
+            if( forecast_information_stale(state)) {
+                schedule_weather_update();
+            }
+        }
     }
 
 /* Launch our service worker as cache */
@@ -441,6 +453,8 @@ let deferredPrompt;
 //}
 
 function init() {
+    console.log(document.addEventListener('visibilityChange', handle_visibility_change));
+
     loadConfig().then(appState => {
         state = appState || default_state;
         //state = default_state;
