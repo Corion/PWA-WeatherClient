@@ -1,10 +1,14 @@
 # This file is run on deployment to create the compressed assets
 
-ASSETS := $(addsuffix .gz,$(wildcard *.js *.css *.html *.json js/*.js css/*.css))
+ASSETS := $(wildcard *.js *.css *.html locations.json js/*.js css/*.css)
+ZIPPEDASSETS := $(addsuffix .gz,$(ASSETS))
 
 .PHONY: deploy
 
 %.gz: %
 	gzip -fk9 $<
 
-deploy: $(ASSETS)
+manifest.json: $(ASSETS)
+	PERLLIB= perl -w ../bump-manifest-version.pl -f
+
+deploy: $(ZIPPEDASSETS) manifest.json.gz
