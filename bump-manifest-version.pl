@@ -4,6 +4,7 @@ use JSON::PP;
 use Getopt::Long;
 use Pod::Usage;
 use POSIX 'strftime';
+use File::Basename 'dirname';
 
 GetOptions(
     'f' => \my $force,
@@ -12,8 +13,9 @@ GetOptions(
     'version=s' => \my $version,
 ) or pod2usage(2);
 
-$manifest ||= 'public/manifest.json';
 $sw_file ||= 'public/sw.js';
+my $base_dir = dirname $sw_file;
+$manifest ||= "$base_dir/manifest.json";
 
 open my $fh, '<:encoding(UTF-8)', $sw_file
     or die "Couldn't read '$sw_file': $!";
@@ -36,7 +38,7 @@ my $sw = do { local $/; <$fh> };
 $sw =~ m!cache.addAll\(\s+\[([^\]]+)\]!ms
     or die "Couldn't read cache.addAll() stanza from '$sw_file'";
 my $cache_string = $1;
-my @cached_files = map { "public/$_" } ($cache_string =~ /^\s+'([^']+)'/mg);
+my @cached_files = map { "$base_dir/$_" } ($cache_string =~ /^\s+'([^']+)'/mg);
 
 my $mtime = (stat($manifest))[9];
 my $manifest_time = $mtime;
