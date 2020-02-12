@@ -453,7 +453,10 @@ let deferredPrompt;
 //}
 
 function init() {
-    console.log(document.addEventListener('visibilityChange', handle_visibility_change));
+    try {
+        console.log(document.addEventListener('visibilityChange', handle_visibility_change));
+    } catch(e) {
+    }
 
     loadConfig().then(appState => {
         state = appState || default_state;
