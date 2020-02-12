@@ -14,3 +14,6 @@ frame-*.png
 *.pl
 .prove
 .patch
+public/*.gz
+public/js/*.gz
+public/css/*.gz
