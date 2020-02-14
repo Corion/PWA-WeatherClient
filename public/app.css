@@ -44,3 +44,10 @@ td {
 span.temperature {
     width: 9em;
 }
+.weather_big {
+    font-size: 25.5vw;
+    text-align: center;
+}
+.temperature_big {
+    text-align: center;
+}

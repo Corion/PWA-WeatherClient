@@ -33,6 +33,20 @@
         <div class="location-border"></div>
     </div>
 </script>
+<script type="text/x-handlebars-template" id="screen_1day">
+    {{#if installOnHomescreen}}<a href="#" onclick="javascript:installOnHomescreen();">Install to home screen</a>{{/if}}
+    <span>Weather data: {{locations.0.forecast.0.issuetime}}</span> <a href="#" onclick="javascript:action_refresh()">&#x21BB;</a>
+
+    <div class="locations">
+        <div class="location-border"></div>
+    {{#each locations}}<div class="location">
+    <div class="location-description">{{forecast.0.description}}</div>
+    <div class="weather_big">{{ current_slot.emoji }}</div>
+    <div class="temperature_big">{{current_slot.mintemp}}° / {{ current_slot.maxtemp }}°</div>
+    </div>{{/each}}
+        <div class="location-border"></div>
+    </div>
+</script>
 <script type="text/x-handlebars-template" id="screen_config">
     <ul>
     {{#each current_config.locations}}<li><span>{{forecast.0.description}}</span><button onclick="javascript:remove_location({{@index}})">x</button></li>{{/each}}
@@ -79,7 +93,7 @@
 </script>
 <script>
     var default_state = {
-        state_schema: '20200125-01',
+        state_schema: '20200214-01',
 
         locations: [
             { description: "current", latitude: 50, longitude: 8,
@@ -210,6 +224,14 @@
         if( ! source ) {
             alert("No screen '"+screen_name+"' found");
         };
+
+        // Update the current time slot to use in the state
+        let now = new Date().getHours();
+        let current_slot = Math.trunc((now+3) / 6);
+        for(let i = 0; i < state.locations.length; i++) {
+            state.locations[i].current_slot = state.locations[i].forecast[current_slot];
+        };
+
         let template = Handlebars.compile(source);
         let s = template(state);
         s = '<div id="screen">' + s + '</div>';
@@ -219,6 +241,10 @@
     };
     function render_3day(state) {
         state.screen = 'screen_3day';
+        update(state);
+    };
+    function render_1day(state) {
+        state.screen = 'screen_1day';
         update(state);
     };
     function render_config(state) {
@@ -456,6 +482,7 @@ function init() {
     try {
         console.log(document.addEventListener('visibilityChange', handle_visibility_change));
     } catch(e) {
+        console.log(e);
     }
 
     loadConfig().then(appState => {
@@ -511,6 +538,7 @@ const clone = (items) => items.map(
 </head>
 <body onload="javascript:init()">
 <div id="header"><a href="#" onclick="javascript:render_3day(state);">Forecast</a>
+               | <a href="#" onclick="javascript:render_1day(state);">Now</a>
                | <a href="#" onclick="javascript:render_about(state);">About</a>
                | <a href="#" onclick="javascruot:render_config(state)">Config</a>
 </div>
