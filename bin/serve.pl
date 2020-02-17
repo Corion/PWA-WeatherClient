@@ -18,7 +18,9 @@ app->static->with_roles('+Compressed');
 plugin 'Gzip';
 
 my $w = Weather::MOSMIX->new(
-    dsn => "dbi:SQLite:dbname=$FindBin::Bin/../../Weather-MOSMIX/db/forecast.sqlite",
+    dbh => {
+        dsn => "dbi:SQLite:dbname=$FindBin::Bin/../../Weather-MOSMIX/mosmix-forecast.sqlite",
+    },
 );
 
 get '/' => sub {
