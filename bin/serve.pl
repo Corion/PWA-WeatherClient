@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Mojolicious::Lite;
 use Mojo::JSON qw(decode_json encode_json);
+use Mojo::File;
 use charnames ':full';
 
 use FindBin;
@@ -10,6 +11,14 @@ use lib "$FindBin::Bin/../../Weather-MOSMIX/lib";
 use Weather::MOSMIX;
 
 push @{app->static->paths} => "$FindBin::Bin/../public";
+
+my $dbfile = app->config->{dbfile}
+           || '../../Weather-MOSMIX/mosmix-forecast.sqlite';
+
+$dbfile = Mojo::File->new($dbfile);
+if( !$dbfile->is_abs ) {
+    $dbfile = Mojo::File->new("$FindBin::Bin/$dbfile");
+};
 
 # If we have a precompressed resource, serve that
 app->static->with_roles('+Compressed');
@@ -19,7 +28,7 @@ plugin 'Gzip';
 
 my $w = Weather::MOSMIX->new(
     dbh => {
-        dsn => "dbi:SQLite:dbname=$FindBin::Bin/../../Weather-MOSMIX/mosmix-forecast.sqlite",
+        dsn => "dbi:SQLite:dbname=$dbfile",
     },
 );
 
