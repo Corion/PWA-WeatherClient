@@ -372,9 +372,9 @@
     }
 
     function handle_visibility_change() {
-            console.log("Focus change", document.visibilityState);
+        //console.log("Focus change", document.visibilityState);
         if( document.visibilityState === 'visible' ) {
-            console.log("We got the focus again");
+            //console.log("We got the focus again");
             // User just switched to us, maybe we can fetch an update
             if( forecast_information_stale(state)) {
                 schedule_weather_update();
@@ -479,11 +479,14 @@ let deferredPrompt;
 //}
 
 function init() {
+    // These are for scheduling a data refresh in the case
+    // where the page hasn't been shown for a while
     try {
         console.log(document.addEventListener('visibilityChange', handle_visibility_change));
     } catch(e) {
         console.log(e);
     }
+    window.addEventListener('focus', handle_visibility_change);
 
     loadConfig().then(appState => {
         state = appState || default_state;
