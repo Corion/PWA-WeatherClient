@@ -42,7 +42,7 @@ td {
 }
 
 span.temperature {
-    width: 9em;
+    font-size: 5.5vw;
 }
 .weather_big {
     font-size: 25.5vw;
