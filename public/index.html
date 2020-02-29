@@ -367,7 +367,8 @@
     }
 
     function forecast_information_stale(info) {
-           ! info.last_fetch
+           !info
+        || ! info.last_fetch
         || (Date.now() - info.last_fetch) > 4*60*60*1000 // 4 hours, make configurable later
     }
 
