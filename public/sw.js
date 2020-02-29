@@ -31,25 +31,46 @@ self.addEventListener('fetch', function(event) {
 });
 */
 
+function fetchAndCache(event) {
+    console.log("Returning network request via fetch() for " + event.request.url);
+    //return fetch(event.request);
+
+    // Fetch data online, cache locally
+    return caches.open(cacheName).then(function(cache) {
+        return fetch(event.request).then(function(response) {
+            if( response ) {
+                //console.log("Stored asset " + event.request.url);
+                cache.put(event.request, response.clone());
+
+                return response;
+            } else {
+                console.log("Fetching " + event.request.url + " failed...");
+                return undefined;
+            };
+        });
+    })
+}
+
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     // Try the cache
     caches.match(event.request).then(function(response) {
-      // Fall back to network
-      if( response )
-        return response;
-      console.log("Returning network request via fetch()");
-      return fetch(event.request);
+      // Try the cache first
+      //console.log(response);
+      if( response !== undefined) {
+          //console.log("Got a valid response from cache for " + event.request.url);
+          return response;
+      };
 
-      // Fetch data online, cache locally
-      /*
-      caches.open(cacheName).then(function(cache) {
-          return fetch(event.request).then(function(response) {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-      })
-      */
+      // Never store our API calls
+      if( event.request.url.match(/\/forecast$/)) {
+          //console.log("API call to "+ + event.request.url);
+          return fetch(event.request);
+      };
+
+      // Fall back to network
+      //console.log("Falling back to the network");
+      return fetchAndCache(event);
 
       // Inform the client that they should update their stuff
       /*
@@ -58,9 +79,11 @@ self.addEventListener('fetch', function(event) {
              url: event.request.url
            });
       */
+      console.log("Should never get here");
 
-    }).catch(function() {
+    }).catch(function(e) {
       // If both fail, show a generic fallback:
+      console.log("Some error occurred",e);
       return caches.match('/offline.html');
       // However, in reality you'd have many different
       // fallbacks, depending on URL & headers.
@@ -69,27 +92,18 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-async function onUpdateForecast(syncEvent) {
-    // we could look at syncEvent.lastChance, but why?
-}
-
-self.addEventListener('sync', async function(event) {
-    if (event.tag == 'update-forecast') {
-        // Fetch the forecast in the background
-        console.log("Would do a background sync update");
-        event.waitUntil(onUpdateForecast(event));
-    }
-});
-
 /* Evict outdated stuff resp. update our new cache */
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
+      console.log("Re-caching assets");
       return Promise.all(
         cacheNames.filter(function(cacheName) {
           // Return true if you want to remove this cache,
           // but remember that caches are shared across
           // the whole origin
+          return 1
+
         }).map(function(cacheName) {
           return caches.delete(cacheName);
         })
